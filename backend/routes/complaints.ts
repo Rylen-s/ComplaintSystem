@@ -1,5 +1,7 @@
 import express from 'express';
 import axios from 'axios';
+import dotenv from 'dotenv'
+dotenv.config();
 
 const router = express.Router();
 const BASE_URL = process.env.BASE_URL;
@@ -10,6 +12,11 @@ const headers = {
   Authorization: `Bearer ${API_KEY!}`,
   "Content-Type": "application/json",
 };
+
+router.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.originalUrl}`);
+  next();
+});
 
 router.post("/", async (req, res) => {
   const { name, email, complaint } = req.body;
@@ -32,6 +39,18 @@ router.patch("/:id", async (req, res) => {
     status: req.body.status,
   }, { headers });
   res.json(response.data);
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await axios.delete(`${BASE_URL}/rest/v1/complaints?id=eq.${id}`, {
+      headers,
+    });
+    res.json(response.data);
+  } catch (err) {
+    res.status(500).json({ error: "Failed to delete complaint." });
+  }
 });
 
 export default router;

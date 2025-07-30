@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 type Complaint = {
   id: string;
@@ -31,6 +32,8 @@ export default function AdminDashboard(){
 
   const deleteComplaint = async (id: string) => {
     await axios.delete(`http://localhost:3000/complaints/${id}`);
+    const updatedData = complaints.filter(c => c.id !== id);
+    setComplaints(updatedData);
     fetchComplaints();
   };
 
@@ -59,6 +62,9 @@ export default function AdminDashboard(){
           ))}
         </tbody>
       </table>
+      <Link to="/submit">
+            <button>Go to Complaint Form</button>
+          </Link>
     </div>
   );
 }

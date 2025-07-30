@@ -9,7 +9,7 @@ function App() {
   
 
   return (
-    <BrowserRouter>
+    <BrowserRouter >
       <Routes>
         <Route path = '/submit' element={<ComplaintForm/>}></Route>
         <Route path = '/admin' element={<AdminDashboard/>}></Route>
